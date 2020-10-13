@@ -1,6 +1,8 @@
 import queue
 import re
 import copy
+import math
+import time
 
 sdes1 = '123456780'
 des1 = [1, 2, 3, 4, 5, 6, 7, 8, 0]
@@ -18,6 +20,17 @@ changeId1 = [
 ]
 wasd = ['w', 'a', 's', 'd']
 
+pos = {
+    '1': [1, 1],
+    '2': [1, 2],
+    '3': [1, 3],
+    '4': [2, 1],
+    '5': [2, 2],
+    '6': [2, 3],
+    '7': [3, 1],
+    '8': [3, 2],
+    '9': [3, 3]
+}
 
 class node(object):
     def __init__(self, num, step, zeroPos, order, degree):
@@ -31,16 +44,35 @@ class node(object):
     def __lt__(self, other):
         return self.cost < other.cost
 
+    # def setCost(self):
+    #     c = 0
+    #     for i in range(self.degree * self.degree):
+    #         if self.num[i] != des1[i]:
+    #             c = c + 1
+    #     return c + self.step
+
     def setCost(self):
         c = 0
         for i in range(self.degree * self.degree):
             if self.num[i] != des1[i]:
-                c = c + 1
+                temp = copy.deepcopy(self.num[i])
+                if temp == 0:
+                    temp = 9
+                x1 = pos[str(temp)][0]
+                y1 = pos[str(temp)][1]
+                x2 = pos[str(i + 1)][0]
+                y2 = pos[str(i + 1)][1]
+                res = abs(x1 - x2) + abs(y1 - y2)
+                c = c + res
         return c + self.step
+
 
 def string_to_list(k):
     list = re.findall('\d', k)
-    return list
+    temp = []
+    for item in list:
+        temp.append(int(item))
+    return temp
 
 def list_to_string(list):
     result = ''
@@ -118,7 +150,12 @@ def change(string):
             walk.append(2)
     return walk
 
-#
-# list = [1, 2, 3, 4, 0, 8, 7, 6, 5]
-# walklist = bfsHash(list, 1, 1, 3)
+
+# list = [5, 1, 3, 0, 8, 4, 2, 6, 7]
+# time1 = time.time()
+# walklist = bfsHash(list, 1, 0, 3)
+# time.sleep(1)
+# time2 = time.time()
+# print('time:', time2 - time1)
 # print(walklist)
+

@@ -10,6 +10,10 @@ from GameWindow3 import GameWindow3
 class GameWindowChoose(QDialog):
     def __init__(self):
         super().__init__()
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(QPixmap('bg.JPG')))
+        self.setPalette(palette)
+
         self.setWindowTitle('请选择游戏难度')
         self.setWindowModality(Qt.ApplicationModal)
         self.initUI()
@@ -33,12 +37,15 @@ class GameWindowChoose(QDialog):
 
     def choose3X3(self):
         self.game_window = GameWindow1()
+        self.hide()
         self.game_window.show()
 
     def choose4X4(self):
         self.game_window = GameWindow2()
+        self.hide()
         self.game_window.show()
 
     def choose5X5(self):
         self.game_window = GameWindow3()
+        self.hide()
         self.game_window.show()

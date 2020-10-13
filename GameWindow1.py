@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import *
 from AIshow import AIshow
 import copy
 import Astar
+import GameWindowChoose
 
 
 class Direction(IntEnum):
@@ -20,6 +21,10 @@ class GameWindow1(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(QPixmap('bg.JPG')))
+        self.setPalette(palette)
+
         self.blocks = []
         self.zero_row = 0
         self.zero_column = 0
@@ -47,17 +52,28 @@ class GameWindow1(QMainWindow):
         # self.setStyleSheet("background-color:gray;")
         # self.show()
 
-        toolbar1 = self.addToolBar('重新开始')
-        new = QAction(QIcon('python.png'), '重新开始', self)
+        toolbar1 = self.addToolBar('更换题目')
+        new = QAction(QIcon('exchangerate.png'), '更换题目', self)
         toolbar1.addAction(new)
         toolbar1.actionTriggered.connect(self.restart)
         toolbar1.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
 
         toolbar2 = self.addToolBar('AI演示')
-        new = QAction(QIcon('python.png'), 'AI演示', self)
+        new = QAction(QIcon('quick.png'), 'AI演示', self)
         toolbar2.addAction(new)
         toolbar2.actionTriggered.connect(self.AIshow)
         toolbar2.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+
+        toolbar3 = self.addToolBar('返回')
+        new = QAction(QIcon('home.png'), '返回', self)
+        toolbar3.addAction(new)
+        toolbar3.actionTriggered.connect(self.back)
+        toolbar3.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+
+    def back(self):
+        self.hide()
+        self.father = GameWindowChoose.GameWindowChoose()
+        self.father.show()
 
     def restart(self):
         self.blocks = []
@@ -175,6 +191,13 @@ class GameWindow1(QMainWindow):
         return True
 
 
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, '退出游戏', '你确定退出游戏吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
+
 class Block(QLabel):
     """ 数字方块 """
 
@@ -202,5 +225,5 @@ class Block(QLabel):
         if self.number == 0:
             self.setStyleSheet("background-color:white;border-radius:10px;")
         else:
-            self.setStyleSheet("background-color:black;border-radius:10px;")
+            self.setStyleSheet("background-color:#000000;border-radius:10px;")
             self.setText(str(self.number))

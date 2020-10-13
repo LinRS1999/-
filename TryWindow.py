@@ -8,6 +8,7 @@ from AIshow import AIshow
 from queue import PriorityQueue
 import Astar
 import copy
+import MainWindow
 
 blocks = [1, 2, 3, 4, 5, 6, 7, 8, 0]
 
@@ -20,6 +21,10 @@ class Direction(IntEnum):
 class TryWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(QPixmap('bg.JPG')))
+        self.setPalette(palette)
+
         self.setWindowTitle('挑战模式')
         self.setWindowModality(Qt.ApplicationModal)
         self.resize(800, 800)
@@ -40,8 +45,14 @@ class TryWindow(QMainWindow):
         form1 = QFormLayout()
         self.form2 = QFormLayout()
 
-        self.time_label = TimeLabel(self)
-        self.id = self.time_label.startTimer(1000)
+        # self.time_label = TimeLabel(self)
+        # self.id = self.time_label.startTimer(1000)
+        self.time_label = TimeLabel()
+        self.timer = QTimer()
+        self.timer.setInterval(1000)
+        self.timer.start()
+        self.timer.timeout.connect(self.time_label.addtime)
+
         form1.addRow('<h1>用时：<h1/>', self.time_label)
 
         self.step_label = StepLabel(self.gothrough)
@@ -84,10 +95,16 @@ class TryWindow(QMainWindow):
         # toolbar1.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
 
         self.toolbar2 = self.addToolBar('AI演示')
-        new = QAction(QIcon('python.png'), 'AI演示', self)
+        new = QAction(QIcon('quick.png'), 'AI演示', self)
         self.toolbar2.addAction(new)
         self.toolbar2.actionTriggered.connect(self.AIshow)
         self.toolbar2.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+
+        self.toolbar3 = self.addToolBar('返回')
+        new = QAction(QIcon('home.png'), '返回', self)
+        self.toolbar3.addAction(new)
+        self.toolbar3.actionTriggered.connect(self.back)
+        self.toolbar3.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
 
 
     # def over(self):
@@ -129,8 +146,13 @@ class TryWindow(QMainWindow):
             walklist = Astar.bfsHash(list, temp2, temp3, 3)
             print('walklist:', walklist)
             temp4 = copy.deepcopy(walklist)
+            self.time_label.ai_add()
             self.ai_show = AIshow(temp1, temp2, temp3, 3, temp4)
+            # self.time_label.tostop()
             self.ai_show.show()
+            # print('flag:' ,self.flag)
+            # if self.flag == 0:
+            #     self.time_label.restart()
 
 
     def reocrd(self, string):
@@ -190,6 +212,11 @@ class TryWindow(QMainWindow):
             self.move(Direction(random_num))
         self.updatePanel()
 
+    def back(self):
+        self.hide()
+        self.father = MainWindow.MainWindow()
+        self.father.show()
+
     # 检测按键
     def keyPressEvent(self, event):
         key = event.key()
@@ -203,7 +230,8 @@ class TryWindow(QMainWindow):
             self.move(Direction.RIGHT)
         self.updatePanel()
         if self.checkResult():
-            self.time_label.tostop()
+            # self.time_label.tostop()
+            self.timer.stop()
             if QMessageBox.Ok == QMessageBox.information(self, '挑战结果', '恭喜您完成关卡'):
                 self.gothrough = self.gothrough + 1
                 self.step_label.add_step()
@@ -212,19 +240,20 @@ class TryWindow(QMainWindow):
                 self.zero_column = 0
                 if self.gothrough < 1:
                     self.onInit()
-                elif self.gothrough >=1 and self.gothrough < 2:
-                    if self.gothrough == 1:
+                elif self.gothrough >=2 and self.gothrough < 4:
+                    if self.gothrough == 2:
                         self.degree = self.degree + 1
                         self.toolbar2.setEnabled(False)
                     self.onInit()
                 else:
-                    if self.gothrough == 2:
+                    if self.gothrough == 4:
                         self.degree = self.degree + 1
                         self.toolbar2.setEnabled(False)
                     self.onInit()
 
                 # self.onInit()
-            self.time_label.restart()
+            # self.time_label.restart()
+            self.timer.start()
     # 方块移动算法
     def move(self, direction):
         if (direction == Direction.UP):  # 上
@@ -270,33 +299,60 @@ class TryWindow(QMainWindow):
                     return False
 
 
+# class TimeLabel(QLabel):
+#     def __init__(self, par):
+#         super().__init__()
+#         self.setText('0')
+#         self.d = par
+#         font = QFont()
+#         font.setPointSize(30)
+#         font.setBold(True)
+#         self.setFont(font)
+#
+#     def timerEvent(self, event):
+#         a = int(self.text()) + 1
+#         if a == 100000:
+#             self.killTimer(self.d.id)
+#         self.setText(str(a))
+#
+#     def tostop(self):
+#         self.killTimer(self.d.id)
+#
+#     def restart(self):
+#         self.startTimer(1000)
+#
+#     def gettime(self):
+#         return int(self.text())
+#
+#     def settime(self):
+#         self.setText('0')
+#
+#     def ai_add(self):
+#         a = int(self.text()) + 20
+#         self.setText(str(a))
+
 class TimeLabel(QLabel):
-    def __init__(self, par):
+    def __init__(self):
         super().__init__()
         self.setText('0')
-        self.d = par
         font = QFont()
         font.setPointSize(30)
         font.setBold(True)
         self.setFont(font)
 
-    def timerEvent(self, event):
+    def addtime(self):
         a = int(self.text()) + 1
-        if a == 100000:
-            self.killTimer(self.d.id)
         self.setText(str(a))
-
-    def tostop(self):
-        self.killTimer(self.d.id)
-
-    def restart(self):
-        self.startTimer(1000)
 
     def gettime(self):
         return int(self.text())
 
     def settime(self):
         self.setText('0')
+
+    def ai_add(self):
+        a = int(self.text()) + 20
+        self.setText(str(a))
 
 class StepLabel(QLabel):
     def __init__(self, num):
@@ -317,6 +373,8 @@ class StepLabel(QLabel):
 
     def setstep(self):
         self.setText('0')
+
+
 
 class Block(QLabel):
     """ 数字方块 """

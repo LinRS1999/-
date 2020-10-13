@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import *
 import copy
 import Astar
 from AIshow import AIshow
+import GameWindowChoose
 
 
 class Direction(IntEnum):
@@ -20,6 +21,10 @@ class GameWindow2(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(QPixmap('bg.JPG')))
+        self.setPalette(palette)
+
         self.blocks = []
         self.zero_row = 0
         self.zero_column = 0
@@ -47,8 +52,8 @@ class GameWindow2(QMainWindow):
         # self.setStyleSheet("background-color:gray;")
         # self.show()
 
-        toolbar1 = self.addToolBar('重新开始')
-        new = QAction(QIcon('python.png'), '重新开始', self)
+        toolbar1 = self.addToolBar('更换题目')
+        new = QAction(QIcon('exchangerate.png'), '更换题目', self)
         toolbar1.addAction(new)
         toolbar1.actionTriggered.connect(self.restart)
         toolbar1.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
@@ -58,6 +63,17 @@ class GameWindow2(QMainWindow):
         # toolbar2.addAction(new)
         # toolbar2.actionTriggered.connect(self.AIshow)
         # toolbar2.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+
+        toolbar3 = self.addToolBar('返回')
+        new = QAction(QIcon('home.png'), '返回', self)
+        toolbar3.addAction(new)
+        toolbar3.actionTriggered.connect(self.back)
+        toolbar3.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+
+    def back(self):
+        self.hide()
+        self.father = GameWindowChoose.GameWindowChoose()
+        self.father.show()
 
     def restart(self):
         self.blocks = []
@@ -161,6 +177,13 @@ class GameWindow2(QMainWindow):
                     return False
 
         return True
+
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, '退出游戏', '你确定退出游戏吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
 
 
 class Block(QLabel):

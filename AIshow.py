@@ -1,4 +1,5 @@
 import sys
+from PyQt5 import QtWidgets
 from enum import IntEnum
 import random
 from PyQt5.QtCore import *
@@ -6,7 +7,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import copy
 import Astar
-
+# import TryWindow
 
 class Direction(IntEnum):
     UP = 0
@@ -20,6 +21,10 @@ class AIshow(QMainWindow):
     # 二维序列，0的行，0的列，几阶
     def __init__(self, blocks, zero_row, zero_column, degree, walklist):
         super().__init__()
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(QPixmap('bg.JPG')))
+        self.setPalette(palette)
+
         self.initblocks = copy.deepcopy(blocks)
         self.initzerorow = copy.deepcopy(zero_row)
         self.initzerocolumn = copy.deepcopy(zero_column)
@@ -52,38 +57,56 @@ class AIshow(QMainWindow):
         self.updatePanel()
         self.widght1.setLayout(self.gltMain)
 
-        self.edit = QTextEdit()
+        # self.edit = QTextEdit()
+        # file = open('order.txt').read()
+        # self.edit.setText(file)
+        # self.edit.setEnabled(False)
         file = open('order.txt').read()
-        self.edit.setText(file)
-        self.edit.setEnabled(False)
+        label = QLabel(file, self)
+        label.setStyleSheet('QLabel{font-size:22px}'
+                            'QLabel{font-weight:bold}'
+                            'QLabel{color:#000000}'
+                            'QLabel{font-family:SimSun}'
+                            )
+        label.setText(file)
+        label.setEnabled(False)
 
         hbox.addWidget(self.widght1)
-        hbox.addWidget(self.edit)
+        # hbox.addWidget(self.edit)
+        hbox.addWidget(label)
         hbox.setStretchFactor(self.widght1, 4)
-        hbox.setStretchFactor(self.edit, 1)
+        hbox.setStretchFactor(label, 1)
 
         mainframe = QWidget()
         mainframe.setLayout(hbox)
         self.setCentralWidget(mainframe)
 
-        self.toolbar1 = self.addToolBar('归位')
-        new = QAction(QIcon('python.png'), '归位', self)
+        self.toolbar1 = self.addToolBar('重新开始')
+        new = QAction(QIcon('return.png'), '重新开始', self)
         self.toolbar1.addAction(new)
         self.toolbar1.actionTriggered.connect(self.restart)
         self.toolbar1.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
 
         self.toolbar2 = self.addToolBar('动画演示')
-        new = QAction(QIcon('python.png'), '动画演示', self)
+        new = QAction(QIcon('play.png'), '动画演示', self)
         self.toolbar2.addAction(new)
         self.toolbar2.actionTriggered.connect(self.AIshow)
         self.toolbar2.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
 
         self.toolbar3 = self.addToolBar('逐步演示')
-        new = QAction(QIcon('python.png'), '逐步演示', self)
+        new = QAction(QIcon('click.png'), '逐步演示', self)
         self.toolbar3.addAction(new)
         self.toolbar3.actionTriggered.connect(self.buttonshow)
         self.toolbar3.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
 
+        self.toolbar4 = self.addToolBar('返回')
+        new = QAction(QIcon('home.png'), '返回', self)
+        self.toolbar4.addAction(new)
+        self.toolbar4.actionTriggered.connect(self.back)
+        self.toolbar4.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+
+    def back(self):
+        self.hide()
 
     def restart(self):
         self.block = copy.deepcopy(self.initblocks)
@@ -95,7 +118,7 @@ class AIshow(QMainWindow):
 
     def AIshow(self):
         self.timer = QTimer()
-        self.timer.setInterval(100)
+        self.timer.setInterval(500)
         self.timer.start()
         self.timer.timeout.connect(self.walk)
         self.toolbar1.setEnabled(False)
@@ -168,6 +191,14 @@ class AIshow(QMainWindow):
                 # 值是否对应
                 elif self.block[row][column] != row * self.degree + column + 1:
                     return False
+
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, '退出AI', '你确定退出AI吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
+
 
 class Block(QLabel):
     """ 数字方块 """
