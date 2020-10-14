@@ -5,6 +5,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import GameWindowChoose
+import MainWindow
 
 
 class Direction(IntEnum):
@@ -65,7 +66,7 @@ class GameWindow3(QMainWindow):
 
     def back(self):
         self.hide()
-        self.father = GameWindowChoose.GameWindowChoose()
+        self.father = MainWindow.MainWindow()
         self.father.show()
 
     def restart(self):

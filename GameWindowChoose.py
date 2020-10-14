@@ -8,12 +8,12 @@ from GameWindow3 import GameWindow3
 
 
 class GameWindowChoose(QDialog):
-    def __init__(self):
+    def __init__(self, GameWindow):
         super().__init__()
         palette = QPalette()
         palette.setBrush(QPalette.Background, QBrush(QPixmap('bg.JPG')))
         self.setPalette(palette)
-
+        self.window = GameWindow
         self.setWindowTitle('请选择游戏难度')
         self.setWindowModality(Qt.ApplicationModal)
         self.initUI()
@@ -34,18 +34,22 @@ class GameWindowChoose(QDialog):
         layout.addWidget(self.button2)
         layout.addWidget(self.button3)
         self.setLayout(layout)
+        self.close()
 
     def choose3X3(self):
         self.game_window = GameWindow1()
-        self.hide()
+        self.window.hide()
         self.game_window.show()
+        self.close()
 
     def choose4X4(self):
         self.game_window = GameWindow2()
-        self.hide()
+        self.window.hide()
         self.game_window.show()
+        self.close()
 
     def choose5X5(self):
         self.game_window = GameWindow3()
-        self.hide()
+        self.window.hide()
         self.game_window.show()
+        self.close()

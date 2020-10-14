@@ -73,7 +73,7 @@ class MainWindow(QWidget):
 
 
     def callGame(self):
-        self.game_window_choose = GameWindowChoose()
+        self.game_window_choose = GameWindowChoose(self)
         self.game_window_choose.show()
 
     def callRank(self):

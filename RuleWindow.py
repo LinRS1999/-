@@ -40,7 +40,6 @@ class RuleWindow(QMainWindow):
         mainframe.setLayout(layout)
         self.setCentralWidget(mainframe)
 
-
     def closeEvent(self, event):
         reply = QMessageBox.question(self, '退出游戏', '你确定退出游戏吗？', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:

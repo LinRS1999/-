@@ -118,7 +118,7 @@ class AIshow(QMainWindow):
 
     def AIshow(self):
         self.timer = QTimer()
-        self.timer.setInterval(500)
+        self.timer.setInterval(100)
         self.timer.start()
         self.timer.timeout.connect(self.walk)
         self.toolbar1.setEnabled(False)

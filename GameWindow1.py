@@ -8,6 +8,7 @@ from AIshow import AIshow
 import copy
 import Astar
 import GameWindowChoose
+import MainWindow
 
 
 class Direction(IntEnum):
@@ -72,7 +73,7 @@ class GameWindow1(QMainWindow):
 
     def back(self):
         self.hide()
-        self.father = GameWindowChoose.GameWindowChoose()
+        self.father = MainWindow.MainWindow()
         self.father.show()
 
     def restart(self):
