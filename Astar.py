@@ -158,4 +158,5 @@ def change(string):
 # time2 = time.time()
 # print('time:', time2 - time1)
 # print(walklist)
+# print(len(walklist))
 
