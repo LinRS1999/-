@@ -48,8 +48,11 @@
   AI演示·通关排名和AI排名将分别记录您的游戏记录
 
 ### AI算法
+- AstarFind.py:本程序采用了requests获取和提交题目，我们只要在**main程序第一行的getProblemOrder函数参数修改学号**即可完成题目要求的拿题->解题->交题操作，非常的轻便，不需要用到Postman
 
-- 本算法采用了requests获取和提交题目，我们只要在程序里输入学号即可完成题目要求的拿题->解题->交题操作，非常的轻便，不需要用到Postman
+- AIFighting.py:如果需要**改成跑所有题目的话，把main程序段下第一行的url改为"……/api/challenge/list"**
+
+- AIFightingSingle.py:main程序第一行getProblemOrder函数的**第一个参数是teamid，第二个参数是问题的uuid，第三个参数是我们team的token，在这里作修改即可对单个问题进行测试**
 
 
 
