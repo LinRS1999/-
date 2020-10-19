@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import *
 import MainWindow
 
 
+# 游戏规则界面
 class RuleWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -19,10 +20,12 @@ class RuleWindow(QMainWindow):
         self.setFixedSize(600, 600)
         self.initUI()
 
+    # 初始化布局
     def initUI(self):
         layout = QHBoxLayout()
         file = open('rule.txt', encoding='utf-8').read()
         label = QLabel(file, self)
+        # 设置优秀规则的css样式
         label.setStyleSheet('QLabel{font-size:25px}'
                             'QLabel{font-weight:bold}'
                             'QLabel{color:#000000}')
