@@ -1,7 +1,17 @@
 # Soft-work（华容道）
 
 ## 徽章
-![1233124](https://img.shields.io/badge/Language-python-brightgreen)
+
+<img src="https://img.shields.io/badge/Language-python-brightgreen" alt="Language" />
+<img src="https://img.shields.io/badge/Tool-PyQt5-yellowgreen" alt="Tools" />
+<img src="https://img.shields.io/badge/Tool-unittest-orange" alt="Tools" />
+
+
+
+
+
+
+
 
 ## 运行环境
 
@@ -40,11 +50,6 @@
 ### AI算法
 
 - 本算法采用了requests获取和提交题目，我们只要在程序里输入学号即可完成题目要求的拿题->解题->交题操作，非常的轻便，不需要用到Postman
-
-
-
-
-
 
 
 
