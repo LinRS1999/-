@@ -1,10 +1,7 @@
 # Soft-work（华容道）
 
 ## 徽章
-
-<img src="https://img.shields.io/badge/Language-python-brightgreen" alt="Language" align="left"/><img src="https://img.shields.io/badge/Tool-PyQt5-yellowgreen" alt="Tools" align="left"/><img src="https://img.shields.io/badge/Tool-unittest-orange" alt="Tools" align="left"/>
-
-
+![1233124](https://img.shields.io/badge/Language-python-brightgreen)
 
 ## 运行环境
 
